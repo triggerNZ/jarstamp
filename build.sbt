@@ -1,18 +1,11 @@
 name := "jarstamp"
 
-version := "1.0"
+organization := "com.pavlinic"
 
-scalaVersion := "2.12.3"
+version := "0.0.1"
 
-val newTimestamp = SettingKey[Long]("newTimestamp")
-newTimestamp := 0
+scalaVersion := "2.10.6"
 
-assembly := {
-  val oldJar = assembly.value
-  val preclean = new File(oldJar.getParentFile(), oldJar.getName() + ".preclean")
-  IO.move(oldJar, preclean)
-  println(s"Rewriting $oldJar")
-  RewriteZip.rewrite(preclean, oldJar, newTimestamp.value)
-  s"shasum $oldJar".!
-  oldJar
-}
+sbtPlugin := true
+
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.5")

@@ -1,3 +1,5 @@
+package com.pavlinic
+
 import java.io.{File, FileOutputStream, InputStream}
 import java.util.zip.{ZipEntry, ZipFile, ZipOutputStream}
 
