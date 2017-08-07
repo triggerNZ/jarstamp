@@ -1,4 +1,5 @@
 package com.pavlinic
+
 import sbt._
 import sbtassembly._, AssemblyKeys._
 
@@ -14,11 +15,23 @@ object Jarstamp extends AutoPlugin {
       val preclean = new File(oldJar.getParentFile(), oldJar.getName() + ".preclean")
       IO.move(oldJar, preclean)
       println(s"Rewriting $oldJar")
-      RewriteZip.rewrite(preclean, oldJar, newTimestamp.value)
+
+      val (duration, _) = time(
+        RewriteZip.rewrite(preclean, oldJar, newTimestamp.value)
+      )
+      println(s"Took $duration ms")
+
       s"shasum $oldJar".!
       oldJar
     }
   )
+
+  def time[T](block: => T): (Long, T) = {
+    val before = System.currentTimeMillis
+    val result = block
+    val timing = System.currentTimeMillis - before
+    (timing, result)
+  }
 }
 
 object JarstampKeys {
